@@ -1,3 +1,10 @@
+---
+title: VS Code Release 1.9.9
+date: 2025-04-12
+categories: [TOP_CATEGORIE, SUB_CATEGORIE]
+tags: [TAG]
+---
+
 2025년 3월 Visual Studio Code 릴리스에 오신 것을 환영합니다.
 ## 에이전트 모드
 - 에이전트 모드가 VS Code 정식 버전으로 사용 가능합니다. `chat.agent.enalbed` 설정을 통해 활성화하세요.
