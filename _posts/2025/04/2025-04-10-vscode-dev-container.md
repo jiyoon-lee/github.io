@@ -32,6 +32,7 @@ Dev Containers의 동작 원리를 간단히 설명하면 다음과 같습니다
 4. 개발: 개발자는 로컬에서 VS Code를 사용하는 것처럼 개발하지만, 실제로는 컨테이너 안에서 코드가 실행됩니다.
 
 ## 주요 구성 요소
+![image](https://github.com/user-attachments/assets/eab9aa40-a658-40b6-96a3-94648763a517)
 
 ### 1. 호스트 시스템
 - VS Code 클라이언트: 개발자가 직접 상호작용하는 에디터 인터페이스
