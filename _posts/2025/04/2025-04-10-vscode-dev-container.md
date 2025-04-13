@@ -32,7 +32,7 @@ Dev Containers의 동작 원리를 간단히 설명하면 다음과 같습니다
 4. 개발: 개발자는 로컬에서 VS Code를 사용하는 것처럼 개발하지만, 실제로는 컨테이너 안에서 코드가 실행됩니다.
 
 ## 주요 구성 요소
-![dev container schematic](image.png)
+
 ### 1. 호스트 시스템
 - VS Code 클라이언트: 개발자가 직접 상호작용하는 에디터 인터페이스
 - 로컬 소스코드 폴더: 프로젝트 파일과 .devcontainer 설정이 포함된 디렉토리
@@ -44,3 +44,106 @@ Dev Containers의 동작 원리를 간단히 설명하면 다음과 같습니다
 
 ### 3. 연결 메커니즘
 - Remote Protocol: VS Code 클라이언트와 서버 간의 통신
+- 볼륨 마운트/복제: 소스코드를 컨테이너에 연결하는 방식
+- 포트 포워딩: 컨테이너 내부 애플리케이션의 포트를 호스트로 연결
+
+# Dev Containers의 장점
+1. "내 컴퓨터에서는 작동해요" 문제 해결
+   모든 개발자가 동일한 환경에서 작업하기 때문에, 한 사람의 컴퓨터에서 작동하는 코드는 모든 사람의 컴퓨터에서 동일하게 작동합니다.
+2. 쉬운 온보딩
+   새로운 팀원이 합류했을 때, 복잡한 설정 과정 없이 Dev Containers를 열기만 하면 바로 개발을 시작할 수 있습니다. "Node.js 14.x 버전을 설치하고, 이 글로벌 패키지를 설치하고, 이 환경 변수를 설정하고..."와 같은 긴 설명이 필요 없습니다.
+3. 로컬 시스템 오염 방지
+   프로젝트마다 다른 버전의 도구나 라이브러리가 필요할 때, 로컬 시스템에 직접 설치하면 충돌이 발생할 수 있습니다. Dev Containers를 사용하면 각 프로젝트의 환경이 격리되어 이런 문제가 발생하지 않습니다.
+4. 개발과 프로덕션 환경의 일관성
+   개발 환경을 컨테이너로 정의하면, 프로덕션 환경과 더 유사한 환경에서 개발할 수 있어 "개발 환경에서는 잘 작동했는데 프로덕션에서는 안돼요"라는 문제를 줄일 수 있습니다.
+
+# Dev Containers 시작하기
+이제 Dev Containers를 실제로 사용해 보는 방법을 알아봅시다.
+
+## 준비물
+1. Visual Studio Code
+2. Docker Desktop
+   - Windows나 macOS 사용자는 Docker Desktop을 설치하세요.
+   - Linux 사용자는 Docker Engine을 설치하면 됩니다.
+3. Dev Conainers 확장: VS Code의 확장 마켓플레이스에서 "Dev Containers"를 검색하여 설치합니다.
+
+## 기존 프로젝트에 Dev Contaniers 설정하기
+1. VS Code에서 프로젝트를 엽니다.
+2. 명령 팔레트(F1 또는 Ctrl+Shift+P)를 열고 "Dev Cotainers: Add Dev Container Configuration Files..."를 실행합니다.
+3. 프로젝트에 맞는 컨테이너 템플릿을 선택합니다(예: Node.js, Python, Java 등)
+4. 명령 팔레트에서 "Dev Containers: Reopen in Containers"를 실행합니다.
+5. VS Code가 컨테이너를 빌드하고 연결할 때까지 기다립니다.
+
+## Dev Containers에서 개발하기
+컨테이너에 연결되면, VS Code 창의 좌측 하단에 "Dev Container: [컨테이너 이름]"이라는 표시가 나타납니다. 이제 평소처럼 개발하면 됩니다! 단, 모든 명령은 컨테이너 내부에서 실행됩니다.
+
+## Dev Container 설정 파일 이해하기
+`.devcontainer` 폴더에는 주로 두 가지 파일이 있습니다.
+1. devcontainer.json: 컨테이너의 설정을 정의합니다.
+2. Dockerfile 또는 docker-compose.yml: 컨테이너 이미지를 빌드하는 방법을 정의합니다.
+
+## devcontainer.json의 주요 설정
+```json
+{
+  "name": "Node.js 프로젝트",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "forwardPorts": [3000],
+  "postCreateCommand": "npm install"
+}
+```
+주요 설정 항목:
+- name: 컨테이너 이름
+- image: 사용할 Docker 이미지
+- extensions: 컨테이너 내에 자동으로 설치할 VS Code 확장
+- forwardPosts 호스트에 포워딩할 포트 번호
+- postCreateCommand: 컨테이너 생성 후 실행할 명령
+
+# 실제 활용 사례
+1. 프론트엔드 프로젝트
+   React, Vue, Angular 등의 프론트엔드 프로젝트에서 Node.js 버전, npm 패키지, 린터 설정 등을 표준화할 수 있습니다.
+2. 백엔드 개발
+   Python, Java, Go 등 다양한 언어로 작성된 백엔드 서비스의 환경을 일관되게 유지할 수 있습니다.
+3. 데이터베이스 활용 프로젝트
+   MySQL, PostgreSQL, MongoDB 등의 데이터베이스를 컨테이너에 포함시켜 개발할 수 있습니다.
+4. 마이크로서비스 개발
+   여러 서비스로 구성된 복잡한 시스템을 Docker Compose를 통해 한 번에 실행할 수 있습니다.
+
+# 고급 활용 팀
+1. 볼륨 마운트 VS 클론
+   Dev Containers를 사용할 때는 두 가지 방식으로 코드에 접근할 수 있습니다.
+   - 로컬 폴더 마운트: 호스트의 폴더를 컨테이너에 마운트합니다. 이는 기본적인 방식입니다.
+     -  예를 들면
+         -  내 컴퓨터의 "게임 프로젝트" 폴더를 컨테이너에 연결해서 사용해요
+         -  컨테이너에서 파일을 수정하면 내 컴퓨터의 실제 파일도 바로 변경돼요.
+   - 볼륨에 클론: Git 저장소를 Docker 볼륨에 직접 클론합니다. 이 방식은 Windows/macOS에서 더 나은 성능을 제공합니다.
+     - 예를 들면
+       - GitHub의 "게임 프로젝트"를 Docker의 볼륨에 직접 다운로드해요
+       - 이 방식은 내 컴퓨터의 파일을 직접 건드리지 않고, Docker 안에서만 파일을 관리해요.
+2. 여러 컨테이너 사용하기
+   복잡한 프로젝트는 여러 컨테이너를 함께 사용할 수 있습니다. 예를 들어, 애플리케이션 서버와 데이터베이스 서버를 별도의 컨티에너로 실행할 수 있습니다.이를 위해 `docker-compose.yml` 파일을 사용합니다.
+3. 사전 빌드된 이미지 활용
+   자주 사용하는 개발 환경은 사전에 이미지로 빌드해 두고 재사용할 수 있습니다. 이렇게 하면 컨테이너 시작 시간을 크게 줄일 수 있습니다.
+
+# 자주 묻는 질문
+Q: Docker와 VS Code Dev Containers는 어떻게 다른가요?
+A: Docker는 컨테이너 기술 자체이고, Dev Containers는 이 Docker 컨테이너를 VS Code와 통합하여 개발환경으로 사용할 수 있게 해주는 확장 기능입니다.
+
+Q: Dev Containers를 사용하면 컴퓨터가 느려지나요?
+A: Docker는 가상 머신보다 가벼운 기술이지만, 일정 수준의 시스템 리소스를 사용합니다. 하지만 대부분의 현대적인 컴퓨터에서는 성증 저하를 크게 느끼지 않을 정도입니다.
+
+Q: 오프라인 환경에서도 사용할 수 있나요?
+A: 한 번 빌드된 컨테이너는 오프라인 환경에서도 사용할 수 있습니다. 단, 처음 빌드할 때는 인터넷 연결이 필요할 수 있습니다.
+
+Q: Git 자격 증명은 어떻게 하나요?
+A: VS Code Dev Containers는 호스트의 Git 자격 증명을 컨테이너와 공유할 수 있는 기능을 제공합니다.이를 통해 컨테이너 내에서도 원활하게 Git 작업을 할 수 있습니다.
+
+# 결론
+VS Code의 Dev Containers는 "작동하지 않아요"라는 말을 듣지 않기 위한 강력한 도구입니다. 개발 환경을 표준화하고, 팀원 간의 일관성을 유지하며, 새로운 프로젝트 설정 시간을 크게 줄여줍니다.
+
+처음에는 Docker와 컨테이너라는 개념이 낯설게 느껴질 수 있지만, 한 번 익숙해지면 이전의 개발 방식으로 돌아가고 싶지 않을 정도로 편리함을 느낄 수 있습니다.
+
+여러분의 다음 프로젝트에 Dev Container를 도입해 보는 건 어떨까요? 개발 환경 설정에 대한 스트레스는 줄이고, 실제 코드 작성에 더 집중할 수 있는 좋은 방법이 될 것입니다.
