@@ -26,6 +26,8 @@ tags: [TAG]
 - 콘텐츠 계층 구조 만들기
 - URL 구조 설계하기
 - 사용자 흐름(User Flow) 다이어 그램 작성하기
+  ![image](https://github.com/user-attachments/assets/0e90990a-7da8-4739-99b7-900ce34f03d4)
+
 
 # 3. UI 컴포넌트 설계
 
@@ -38,6 +40,7 @@ tags: [TAG]
 - 데이터 흐름 다이어그램 작성하기
 - API 통신 전략 수립하기
 - 캐싱 전략 설계하기
+  ![image](https://github.com/user-attachments/assets/f80b3fcb-6d00-41a7-acff-4d8cb64c8326)
 
 # 5. 성능 최적화 전략
 페이지 로딩 및 렌더링 성능을 향상시키기 위한 전략을 수립합니다.
